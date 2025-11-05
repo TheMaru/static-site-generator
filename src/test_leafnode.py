@@ -22,3 +22,8 @@ class TestLeafNode(unittest.TestCase):
         self.assertEqual(
             link.to_html(), '<a href="foo.bar" target="_blank">link text</a>'
         )
+
+    def test_to_html_no_value(self):
+        with self.assertRaises(ValueError):
+            no_value = LeafNode("a", None, {"href": "foo.bar", "target": "_blank"})
+            no_value.to_html()

@@ -8,6 +8,7 @@ class TestHTMLNode(unittest.TestCase):
         headline = HTMLNode("h1", "my headline", [], {})
         link = HTMLNode("a", "link", [], {"href": "foo.bar", "target": "_blank"})
         paragraph = HTMLNode("p", "", [headline, link], {})
+        noneNode = HTMLNode()
 
         self.assertEqual(headline.tag, "h1")
         self.assertEqual(headline.value, "my headline")
@@ -21,9 +22,15 @@ class TestHTMLNode(unittest.TestCase):
 
         self.assertEqual(paragraph.tag, "p")
         self.assertEqual(paragraph.value, "")
+        assert paragraph.children is not None
         self.assertIn(headline, paragraph.children)
         self.assertIn(link, paragraph.children)
         self.assertEqual(paragraph.props, {})
+
+        self.assertIsNone(noneNode.tag)
+        self.assertIsNone(noneNode.value)
+        self.assertIsNone(noneNode.children)
+        self.assertIsNone(noneNode.props)
 
     def test_repr(self):
         headline = HTMLNode("h1", "my headline", [], {})

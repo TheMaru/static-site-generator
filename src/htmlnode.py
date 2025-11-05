@@ -3,12 +3,16 @@ from __future__ import annotations
 
 class HTMLNode:
     def __init__(
-        self, tag: str, value: str, children: list[HTMLNode], props: dict[str, str] = {}
+        self,
+        tag: str | None = None,
+        value: str | None = None,
+        children: list[HTMLNode] | None = None,
+        props: dict[str, str] | None = None,
     ) -> None:
         self.tag = tag
         self.value = value
-        self.children: list[HTMLNode] = children
-        self.props: dict[str, str] = props
+        self.children = children
+        self.props = props
 
     def to_html(self) -> str:
         raise NotImplementedError()
