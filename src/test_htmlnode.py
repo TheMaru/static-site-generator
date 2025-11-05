@@ -49,6 +49,12 @@ class TestHTMLNode(unittest.TestCase):
         self.assertIn("_blank", r)
         self.assertIn("my headline", r)
 
+    def test_props_to_html(self):
+        props = {"href": "foo.bar", "target": "_blank"}
+        link = HTMLNode("a", "link", [], props)
+
+        self.assertEqual(link.props_to_html(), ' href="foo.bar" target="_blank"')
+
 
 if __name__ == "__main__":
     unittest.main()

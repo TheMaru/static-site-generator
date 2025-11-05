@@ -3,7 +3,7 @@ from __future__ import annotations
 
 class HTMLNode:
     def __init__(
-        self, tag: str, value: str, children: list[HTMLNode], props: dict[str, str]
+        self, tag: str, value: str, children: list[HTMLNode], props: dict[str, str] = {}
     ) -> None:
         self.tag = tag
         self.value = value
@@ -18,7 +18,7 @@ class HTMLNode:
         if self.props is None:
             return ret_str
         for key, value in self.props.items():
-            ret_str += f" {key}={value}"
+            ret_str += f' {key}="{value}"'
 
         return ret_str
 
