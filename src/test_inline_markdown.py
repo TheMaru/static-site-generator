@@ -1,6 +1,10 @@
 import unittest
 
-from inline_markdown import split_nodes_delimiter
+from inline_markdown import (
+    extract_markdown_images,
+    extract_markdown_links,
+    split_nodes_delimiter,
+)
 from textnode import TextNode, TextType
 
 
@@ -101,3 +105,43 @@ def test_delim_bold_and_italic(self):
             TextNode("italic", TextType.ITALIC),
         ],
     )
+
+
+class TestExtractMarkdownImages(unittest.TestCase):
+    def test_returns_single(self):
+        text = "This is text with ![rick roll](https://i.imgur.com/aKaOqIh.gif) in it"
+        image_data = extract_markdown_images(text)
+
+        self.assertEqual(image_data, [("rick roll", "https://i.imgur.com/aKaOqIh.gif")])
+
+    def test_returns_multiple(self):
+        text = "This is text with ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg) in it"
+        image_data = extract_markdown_images(text)
+
+        self.assertEqual(
+            image_data,
+            [
+                ("rick roll", "https://i.imgur.com/aKaOqIh.gif"),
+                ("obi wan", "https://i.imgur.com/fJRm4Vk.jpeg"),
+            ],
+        )
+
+
+class TestExtractMarkdownLinks(unittest.TestCase):
+    def test_returns_single(self):
+        text = "This is text with [to foobar](http://foo.bar) in it"
+        link_data = extract_markdown_links(text)
+
+        self.assertEqual(link_data, [("to foobar", "http://foo.bar")])
+
+    def test_returns_multiple(self):
+        text = "This is text with [to foobar](http://foo.bar) and [bla fasel](http://www.blafasel.com) in it"
+        link_data = extract_markdown_links(text)
+
+        self.assertEqual(
+            link_data,
+            [
+                ("to foobar", "http://foo.bar"),
+                ("bla fasel", "http://www.blafasel.com"),
+            ],
+        )
