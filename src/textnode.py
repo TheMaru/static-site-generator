@@ -54,4 +54,6 @@ def text_node_to_html_node(text_node: TextNode):
             assert text_node.url is not None
             return LeafNode("img", "", {"src": text_node.url, "alt": text_node.text})
         case _:
-            raise Exception("The enum for this type does not seem to be implemented")
+            raise Exception(
+                f"The enum for this type ({text_node.text_type}) does not seem to be implemented"
+            )
