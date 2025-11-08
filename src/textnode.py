@@ -1,4 +1,5 @@
 from enum import Enum
+from htmlnode import HTMLNode
 from leafnode import LeafNode
 
 
@@ -29,10 +30,10 @@ class TextNode:
         )
 
     def __repr__(self) -> str:
-        return f"TextNode({self.text}, {self.text_type.value}, {self.url})"
+        return f'TextNode("{self.text}", {self.text_type.value}, {self.url})'
 
 
-def text_node_to_html_node(text_node: TextNode):
+def text_node_to_html_node(text_node: TextNode) -> HTMLNode:
     if not isinstance(text_node.text_type, TextType):
         raise TypeError(
             f"text_node.text_type must be TextType, got {type(text_node.text_type).__name__!r}"
