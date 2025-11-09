@@ -1,10 +1,27 @@
-from textnode import TextNode, TextType
-
+import os
+from os.path import isfile
+import shutil
 
 def main() -> None:
-    text_node = TextNode("foo bar", TextType.PLAIN)
-    print(text_node)
+    if os.path.exists("./public"):
+        shutil.rmtree("./public")
 
+    os.mkdir("./public")
+    deep_copy_from_to("./public", "./static")
+    return None
+
+def deep_copy_from_to(target: str, source: str)-> None:
+    print(f"init fn with {target}, {source}")
+
+    contents = os.listdir(source)
+    for content in contents:
+        if os.path.isfile(os.path.join(source, content)):
+            print(f"copy file from {os.path.join(source, content)} to {os.path.join(target, content)}")
+            shutil.copy(os.path.join(source, content), os.path.join(target, content))
+        else:
+            print(f"create folder with name {content} at {os.path.join(target, content)}")
+            os.mkdir(os.path.join(target, content))
+            deep_copy_from_to(os.path.join(target, content), os.path.join(source, content))
 
 if __name__ == "__main__":
     main()
