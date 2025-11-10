@@ -176,3 +176,13 @@ def ol_to_html_node(block: str) -> HTMLNode:
         html_items.append(ParentNode("li", children))
 
     return ParentNode("ol", html_items)
+
+
+def extract_title(markdown: str) -> str:
+    pattern = re.compile(r"^# .+", re.MULTILINE)
+    matches = pattern.findall(markdown)
+
+    if len(matches) == 0:
+        raise ValueError("no title found in document")
+
+    return matches[0].lstrip("#").strip()

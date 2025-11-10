@@ -3,6 +3,7 @@ import unittest
 from block_markdown import (
     BlockType,
     block_to_block_type,
+    extract_title,
     markdown_to_blocks,
     markdown_to_html_node,
 )
@@ -293,3 +294,46 @@ some
             html,
             "<div><p>some</p><ol><li>ordered list</li><li>with <b>bold</b></li><li>items</li></ol></div>",
         )
+
+class TestExtractTitle(unittest.TestCase):
+    def test_finding_title(self):
+        md = """
+## wrong
+
+# correct title
+
+some other
+
+### stuff
+        """
+
+        title = extract_title(md)
+        self.assertEqual(title, "correct title")
+
+    def test_no_title(self):
+        with self.assertRaises(ValueError) as caught:
+            md = """
+## wrong
+
+no title
+
+some other
+
+### stuff
+            """
+
+            extract_title(md)
+            self.assertIn("no title found in document", str(caught.exception))
+
+    def test_wrong_format(self):
+        with self.assertRaises(ValueError) as caught:
+            md = """
+# 
+
+just some text
+            """
+
+            extract_title(md)
+            self.assertIn("no title found in document", str(caught.exception))
+
+
