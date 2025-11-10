@@ -1,7 +1,7 @@
 import os
 import shutil
 
-from generate_content import generate_page
+from generate_content import generate_page, generate_pages_recursive
 
 def main() -> None:
     if os.path.exists("./public"):
@@ -10,7 +10,8 @@ def main() -> None:
     os.mkdir("./public")
     deep_copy_from_to("./public", "./static")
 
-    generate_page("./content/index.md", "./template.html", "./public/index.html")
+    generate_pages_recursive("./content", "./template.html", "./public")
+
     return None
 
 def deep_copy_from_to(target: str, source: str)-> None:

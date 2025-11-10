@@ -26,3 +26,21 @@ def generate_page(from_path: str, template_path: str, dest_path: str):
 
     except Exception as e:
         return f"Error: {e}"
+
+
+def generate_pages_recursive(
+    dir_path_content: str, template_path: str, dest_dir_path: str
+) -> None:
+    dir_elements = os.listdir(dir_path_content)
+
+    for element in dir_elements:
+        path_from = os.path.join(dir_path_content, element)
+        path_to = os.path.join(dest_dir_path, element)
+        if os.path.isfile(path_from):
+            path_to = path_to.replace(".md", ".html")
+            print(f"generate html file from {path_from} to {path_to}")
+            generate_page(path_from, template_path, path_to)
+        else:
+            print(f"create folder with name {element} at {path_to}")
+            os.mkdir(path_to)
+            generate_pages_recursive(path_from, template_path, path_to)
