@@ -1,16 +1,21 @@
 import os
 import shutil
+import sys
 
 from generate_content import generate_page, generate_pages_recursive
 
 def main() -> None:
-    if os.path.exists("./public"):
-        shutil.rmtree("./public")
+    basepath = "/"
+    if len(sys.argv) > 1:
+        basepath = sys.argv[1] 
 
-    os.mkdir("./public")
-    deep_copy_from_to("./public", "./static")
+    if os.path.exists("./docs"):
+        shutil.rmtree("./docs")
 
-    generate_pages_recursive("./content", "./template.html", "./public")
+    os.mkdir("./docs")
+    deep_copy_from_to("./docs", "./static")
+
+    generate_pages_recursive("./content", "./template.html", "./docs", basepath)
 
     return None
 

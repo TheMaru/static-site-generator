@@ -2,7 +2,7 @@ import os
 from block_markdown import extract_title, markdown_to_html_node
 
 
-def generate_page(from_path: str, template_path: str, dest_path: str):
+def generate_page(from_path: str, template_path: str, dest_path: str, basepath):
     print(f"Generating page from {from_path} to {dest_path} using {template_path}")
 
     try:
@@ -15,8 +15,11 @@ def generate_page(from_path: str, template_path: str, dest_path: str):
         title = extract_title(markdown)
         html = markdown_to_html_node(markdown).to_html()
 
-        new_file_content = template.replace("{{ Title }}", title).replace(
-            "{{ Content }}", html
+        new_file_content = (
+            template.replace("{{ Title }}", title)
+            .replace("{{ Content }}", html)
+            .replace('href="/', f'href="{basepath}')
+            .replace('src="/', f'src="{basepath}')
         )
 
         file_directory = os.path.dirname(dest_path)
@@ -29,7 +32,7 @@ def generate_page(from_path: str, template_path: str, dest_path: str):
 
 
 def generate_pages_recursive(
-    dir_path_content: str, template_path: str, dest_dir_path: str
+    dir_path_content: str, template_path: str, dest_dir_path: str, basepath: str
 ) -> None:
     dir_elements = os.listdir(dir_path_content)
 
@@ -39,8 +42,8 @@ def generate_pages_recursive(
         if os.path.isfile(path_from):
             path_to = path_to.replace(".md", ".html")
             print(f"generate html file from {path_from} to {path_to}")
-            generate_page(path_from, template_path, path_to)
+            generate_page(path_from, template_path, path_to, basepath)
         else:
             print(f"create folder with name {element} at {path_to}")
             os.mkdir(path_to)
-            generate_pages_recursive(path_from, template_path, path_to)
+            generate_pages_recursive(path_from, template_path, path_to, basepath)
